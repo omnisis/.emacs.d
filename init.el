@@ -33,13 +33,30 @@
     (package-install 'use-package))
   (require 'use-package)
   
+
   ;; makes handling lisp expressions much, much easier
   (use-package paredit)
+
+
+  ;; helps you to understand what keys are bound in a given context
+  ;; because many packages will use guide-key in a local mode hook
+  ;; to help learn their bindings we put this fairly early in the init
+  ;; sequence
+  (use-package guide-key 
+    :ensure t
+    :demand
+    :config 
+    (require 'guide-key)
+    (setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
+    (setq guide-key/idle-delay 0.1)
+    (guide-key-mode 1))
 
   ;; emacs autocompletion that doesn't suck
   (use-package company
     :diminish company-mode
     :commands company-mode
+    :ensure t
+    :demand
     :init
     (setq
      company-dabbrev-ignore-case nil
@@ -68,6 +85,7 @@
   ;; makes ido work a little bit more like sublime text
   (use-package flx-ido
     :demand
+    :ensure t
     :init
     (setq
      ido-enable-flex-matching t
@@ -131,13 +149,26 @@
   ;; better tags support
   (use-package etags-select
     :commands etags-select-find-tag
-    :demand)
+    :demand
+    :ensure t)
 
   ;; undo tree == comprehensible undo history
   (use-package undo-tree
+    :ensure t
+    :demand
     :diminish undo-tree-mode
     :config (global-undo-tree-mode)
-    :bind ("s-/" . undo-tree-visualize)))
+    :bind ("s-/" . undo-tree-visualize))
+
+
+  ;; Backend for org-mode that exports to github-flavored Markdown
+  (use-package ox-gfm
+    :ensure t
+    :config
+    (require 'ox-gfm nil t))
+
+  
+)
 
 
 ;; intialize and configure pkg system
@@ -156,7 +187,7 @@
  '(ensime-save-before-compile t)
  '(package-selected-packages
    (quote
-    (etags-select undo-tree ensime use-package smart-mode-line monokai-theme magit tagedit rainbow-delimiters projectile smex ido-ubiquitous clojure-mode-extra-font-locking paredit ac-cider darcula-theme cider)))
+    (dired-sort dired+ guide-key ox-gfm etags-select undo-tree ensime use-package smart-mode-line monokai-theme magit tagedit rainbow-delimiters projectile smex ido-ubiquitous clojure-mode-extra-font-locking paredit ac-cider darcula-theme cider)))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -187,6 +218,8 @@
 
 ;; Hard-to-categorize customizations
 (load "misc.el")
+
+(require 'dired-support)
 
 ;; Langauage-specific
 (require 'elisp-support)

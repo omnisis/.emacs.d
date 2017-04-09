@@ -57,7 +57,6 @@
 (setq sml/theme 'dark)
 (sml/setup)
 
-;; Based on Steve Yegge's suggestion of re-mapping the META
-;; key to a chord on CTRL so we can just forget about it
-(global-set-key "\C-x\C-m" 'execute-extended-command)
-(global-set-key "\C-c\C-m" 'execute-extended-command)
+
+;; global hotkey to grab pkg listings
+(global-set-key (kbd "C-c C-p") 'package-list-packages-no-fetch)

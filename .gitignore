@@ -6,3 +6,6 @@ auto-save-list
 cider-history
 elisp-samples.el
 ensime
+TAGS
+backups/
+*.eld

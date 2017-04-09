@@ -47,9 +47,20 @@
 ;; Enchances M-x to allow easier execution of cmds.  Provides
 ;; a filterable list of possible cmds in the minibuffer
 ;; http://www.emacswiki.org/emacs/Smex
+(require 'smex)
 (setq smex-save-file (concat user-emacs-directory ".smex-items"))
 (smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
+
+(defun myemacs/meta-x ()
+  "A meta-X wrapper so we can change the default behavior of execute-extended-command"
+  (interactive)
+  (call-interactively 'smex))
+
+;; Based on Steve Yegge's suggestion of re-mapping the META
+;; key to a chord on CTRL so we can just forget about it
+(global-set-key (kbd  "C-x C-x") 'myemacs/meta-x)
+(global-set-key (kbd  "C-c C-x") 'myemacs/meta-x)
+(global-set-key (kbd "M-x") 'myemacs/meta-x)
 
 ;; projectile all the things!
 (projectile-global-mode)
