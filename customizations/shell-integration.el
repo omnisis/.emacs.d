@@ -10,4 +10,16 @@
 ;;  (exec-path-from-shell-copy-envs
 ;;   '("PATH")))
 
+;; Required to handle ANSI color sequences properly
+;;(add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
+;;(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
+(global-set-key [f2] 'shell)
+(global-set-key (kbd "C-<f2>") 'ansi-term)
+
+(setq shell-file-name "/bin/bash")
+(defun myemacs/shell-mode-hook ()
+  ;; native shell is ZSH, this is a workaround
+  (setenv "SHELL" "/bin/bash"))
+
+(add-hook 'shell-mode-hook 'myemacs/shell-mode-hook)

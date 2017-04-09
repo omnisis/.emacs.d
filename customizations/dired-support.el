@@ -11,6 +11,7 @@
   :demand)
 
 
+
 ;; local mode guide-key setup for dired mode ...
 (defun myemacs/conf-dired-guidekey ()
   (guide-key/add-local-guide-key-sequence "%"))

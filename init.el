@@ -187,7 +187,7 @@
  '(ensime-save-before-compile t)
  '(package-selected-packages
    (quote
-    (dired-sort dired+ guide-key ox-gfm etags-select undo-tree ensime use-package smart-mode-line monokai-theme magit tagedit rainbow-delimiters projectile smex ido-ubiquitous clojure-mode-extra-font-locking paredit ac-cider darcula-theme cider)))
+    (ido-grid-mode dired-sort dired+ guide-key ox-gfm etags-select undo-tree ensime use-package smart-mode-line monokai-theme magit tagedit rainbow-delimiters projectile smex ido-ubiquitous clojure-mode-extra-font-locking paredit ac-cider darcula-theme cider)))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

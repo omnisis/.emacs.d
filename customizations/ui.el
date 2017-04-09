@@ -60,3 +60,5 @@
 
 ;; global hotkey to grab pkg listings
 (global-set-key (kbd "C-c C-p") 'package-list-packages-no-fetch)
+(global-set-key (kbd "<f10>") 'toggle-frame-fullscreen)
+(global-set-key (kbd "C-<f10>") 'toggle-frame-maximized)

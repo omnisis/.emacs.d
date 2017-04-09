@@ -11,6 +11,16 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
+;; ido is awesome but when you have long filenames it gets harder to read
+;; i've tried ido-vertical but grid-mode is more flexible and let's you
+;; code in fallbacks if desired
+(require 'use-package)
+(use-package ido-grid-mode
+  :ensure t
+  :demand
+  :config
+  (ido-grid-mode 1))
+
 ;; Turn on recent file mode so that you can more easily switch to recently
 ;; edited files when you first start emacs
 (setq recentf-save-file (concat user-emacs-directory ".recentf"))
@@ -26,19 +36,12 @@
 ;; http://www.emacswiki.org/emacs/InteractivelyDoThings
 (ido-mode t)
 
-;; This allows partial matches, e.g. "tl" will match "Tyrion Lannister"
-(setq ido-enable-flex-matching t)
-
-;; Turn this behavior off because it's annoying
-(setq ido-user-filename-at-point nil)
-
-
-;; Don't try to match file across all "work" directories; only match
-;; files in the current directory displayed in the minibuffer
-(setq ido-auto-merge-work-directories-length -1)
-
-;; Includes buffer names of recently open files, even if they're not open now
-(setq ido-use-virtual-buffers t)
+; some ido configurations ...
+(setq ido-enable-flex-matching t  ; This allows partial matches, e.g. "tl" will match "Tyrion Lannister"
+      ido-user-filename-at-point nil ; Turn this behavior off because it's annoying
+      ido-auto-merge-work-directories-length -1 ; Don't try to match file across all "work" directories
+      ido-use-virtual-buffers t ; Includes buffer names of recently open files, even if they're not open now
+      )
 
 
 ;; shows a list of buffers
@@ -64,3 +67,8 @@
 
 ;; projectile all the things!
 (projectile-global-mode)
+
+(defun myemacs/projectile-guidekeys ()
+  (guide-key/add-local-guide-key-sequence "C-c p"))
+
+(add-hook 'projectile-mode-hook 'myemacs/projectile-guidekeys)
