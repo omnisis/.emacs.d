@@ -1,13 +1,22 @@
+;; better tags support
+(use-package etags-select
+  :commands etags-select-find-tag
+  :demand
+  :ensure t)
 
-;; Changes all yes/no questions to y/n type
-(fset 'yes-or-no-p 'y-or-n-p)
+;; undo tree == comprehensible undo history
+(use-package undo-tree
+  :ensure t
+    :demand
+    :diminish undo-tree-mode
+    :config (global-undo-tree-mode)
+    :bind ("s-/" . undo-tree-visualize))
 
-;; shell scripts
-(setq-default sh-basic-offset 2)
-(setq-default sh-indentation 2)
+;; git integration
+(use-package magit
+  :demand
+  :ensure t)
 
-;; No need for ~ files when editing
-(setq create-lockfiles nil)
+(message "Loaded Config Layer :: MISC")
+(provide 'misc)
 
-;; Go straight to scratch buffer on startup
-(setq inhibit-startup-message t)

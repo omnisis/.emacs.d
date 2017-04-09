@@ -1,4 +1,3 @@
-
 ;; Customizations relating to editing a buffer.
 
 ;; key binding to use "hippie example" for text autocompletion
@@ -55,8 +54,6 @@
 (global-set-key (kbd "C-;") 'toggle-comment-on-line)
 		
 
-;; rainbows for days!
-(setq global-rainbow-delimiters-mode t)
 
 ;; use 2 spaces for tabs
 (defun die-tabs()
@@ -66,6 +63,13 @@
   (untabify (region-beginning) (region-end))
   (keyboard-quit))
 
+
+;; shell scripts indentation level
+(setq-default sh-basic-offset 2)
+(setq-default sh-indentation 2)
+
+;; No need for ~ files when editing
+(setq create-lockfiles nil)
 
 ;; fix weird os x kill error
 ;;(defun ns-get-pasteboard()
@@ -86,3 +90,10 @@
   (insert " "))
 
 (global-set-key (kbd "C-c j") 'join-lines)
+
+;; edit html tags like sexps
+(use-package tagedit :demand :ensure t)
+
+(message "Loaded Config Layer :: EDITING")
+(provide 'editing)
+

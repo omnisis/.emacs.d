@@ -1,5 +1,6 @@
 ;; These customizations make it easier for you to navigate files,
 ;; switch buffers, and choose options from the minibuffer
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; when several buffers visit identically-named files,
 ;; Emacs must give the buffers distinct names.  The usual method
@@ -11,22 +12,31 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
-;; ido is awesome but when you have long filenames it gets harder to read
-;; i've tried ido-vertical but grid-mode is more flexible and let's you
-;; code in fallbacks if desired
-(require 'use-package)
-(use-package ido-grid-mode
-  :ensure t
-  :demand
-  :config
-  (ido-grid-mode 1))
-
+ 
 ;; Turn on recent file mode so that you can more easily switch to recently
 ;; edited files when you first start emacs
-(setq recentf-save-file (concat user-emacs-directory ".recentf"))
+(defun myemacs/ido-recentf-open ()
+  "Use `ido-completing-read' to \\[find-file] a recent file"
+  (interactive)
+  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+      (message "Opening file...")
+    (message "Aborting")))
+
 (require 'recentf)
-(recentf-mode 1)
-(setq recentf-max-saved-items 40)
+(setq 
+ recentf-auto-cleanup (number-to-string (* 60 15)) ;; cleanup files ever 15 mins
+ recentf-max-menu-items 150
+ recentf-save-file (concat user-emacs-directory ".recentf"))  
+(global-set-key (kbd "C-x C-r") 'myemacs/ido-recentf-open)
+(recentf-mode t)
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; BEGIN IDO Config 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; ido-mode allows you to more easily navigate choices.  For example,
 ;; when you want to switch buffers, ido presents you with a list
@@ -34,25 +44,64 @@
 ;; name, ido will narrow down the list of buffers to match the text
 ;; you've typed in
 ;; http://www.emacswiki.org/emacs/InteractivelyDoThings
+(require 'ido)
+;; allows partial matching, e.d. "tl" will match "Tyrion Lannister"
+(setq ido-enable-flex-matching t)
+;; turn this off, it's annoying
+(setq ido-user-filename-at-point nil)
+;; don't try to match across all "work directories"
+(setq ido-auto-merge-work-directories-length -1) 
+;; include buffer names of recently open files even if not open now
+(setq ido-use-virtual-buffers t) 
 (ido-mode t)
-
-; some ido configurations ...
-(setq ido-enable-flex-matching t  ; This allows partial matches, e.g. "tl" will match "Tyrion Lannister"
-      ido-user-filename-at-point nil ; Turn this behavior off because it's annoying
-      ido-auto-merge-work-directories-length -1 ; Don't try to match file across all "work" directories
-      ido-use-virtual-buffers t ; Includes buffer names of recently open files, even if they're not open now
-      )
-
 
 ;; shows a list of buffers
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
+;; allows ido usage in as many contexts as possible
+(use-package ido-ubiquitous 
+  :ensure t
+  :demand)
+
+;; ido is awesome but when you have long filenames it gets harder to read
+;; i've tried ido-vertical but grid-mode is more flexible and let's you
+;; code in fallbacks if desired
+(use-package ido-grid-mode
+  :ensure t
+  :demand
+  :config
+  (ido-grid-mode 1))
+
+;; makes ido work a little bit more like sublime text
+(use-package flx-ido
+  :demand
+  :ensure t
+  :init
+  (setq
+   ido-enable-flex-matching t
+   ;; C-d to open directories
+   ;; C-f to revert to find-file
+   ido-show-dot-for-dired nil
+   ido-enable-dot-prefix t)
+  :config
+  (ido-mode t)
+  (ido-everywhere 1)
+  (flx-ido-mode 1))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; END IDO Config 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; Enchances M-x to allow easier execution of cmds.  Provides
 ;; a filterable list of possible cmds in the minibuffer
 ;; http://www.emacswiki.org/emacs/Smex
-(require 'smex)
-(setq smex-save-file (concat user-emacs-directory ".smex-items"))
-(smex-initialize)
+(use-package smex
+  :ensure t
+  :demand
+  :config
+  (setq smex-save-file (concat user-emacs-directory ".smex-items"))
+  (smex-initialize))
+
 
 (defun myemacs/meta-x ()
   "A meta-X wrapper so we can change the default behavior of execute-extended-command"
@@ -65,10 +114,45 @@
 (global-set-key (kbd  "C-c C-x") 'myemacs/meta-x)
 (global-set-key (kbd "M-x") 'myemacs/meta-x)
 
-;; projectile all the things!
-(projectile-global-mode)
 
-(defun myemacs/projectile-guidekeys ()
+;; projectile is an efficient way to navigate "projects" based
+;; on common version control and build system files. 
+(use-package projectile
+  :demand
+  
+  :init 
+  (setq projectile-use-git-grep t)
+  
+  :config 
+  (projectile-global-mode)
+  
+  :bind (("s-f" . projectile-find-file)
+         ("s-F" . projectile-grep)))
+
+
+
+;; guide-key helps you to understand what keys are bound in a given context
+;; because many packages will use guide-key in a local mode hook
+;; to help learn their bindings we put this fairly early in the init
+;; sequence
+;; TODO: Allow switching between guide-key and ivy + which-key
+
+(defun myemacs/projectile-mode-hook-fn ()
   (guide-key/add-local-guide-key-sequence "C-c p"))
 
-(add-hook 'projectile-mode-hook 'myemacs/projectile-guidekeys)
+(use-package guide-key 
+  :ensure t
+  :demand
+  :config 
+  (require 'guide-key)
+  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
+  (setq guide-key/idle-delay 0.1)
+  (setq guide-key/popup-window-position 'bottom)
+  (setq guide-key/text-scale-amount 1.5)
+  (add-hook 'projectile-mode-hook #'myemacs/projectile-mode-hook-fn)
+  (guide-key-mode 1))
+
+
+(message "Loaded Config Layer :: NAVIGATION")
+(provide 'navigation)
+

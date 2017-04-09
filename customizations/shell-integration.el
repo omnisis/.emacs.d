@@ -23,3 +23,6 @@
   (setenv "SHELL" "/bin/bash"))
 
 (add-hook 'shell-mode-hook 'myemacs/shell-mode-hook)
+
+(message "Loaded Config Layer :: SHELL-INTEGRATION")
+(provide 'shell-integration)

@@ -14,7 +14,12 @@
   (scroll-bar-mode 0))
 
 ;; load our preferred theme
+;; TODO: Move to themes ??
 (load-theme 'darcula t)
+
+
+;; Go straight to scratch buffer on startup
+(setq inhibit-startup-message t)
 
 ;; increate font size for better readability
 (set-face-attribute 'default nil :height 140)
@@ -44,6 +49,9 @@
 ;; No blinking curose, it's distracting
 (blink-cursor-mode 0)
 
+;; Changes all yes/no questions to y/n type
+(fset 'yes-or-no-p 'y-or-n-p)
+
 ;; full path in titlebar
 (setq-default frame-title-format "%b (%f)")
 
@@ -62,3 +70,44 @@
 (global-set-key (kbd "C-c C-p") 'package-list-packages-no-fetch)
 (global-set-key (kbd "<f10>") 'toggle-frame-fullscreen)
 (global-set-key (kbd "C-<f10>") 'toggle-frame-maximized)
+
+;; makes re-builder avoid need for double backslash escaping
+(require 're-builder)
+(setq reb-re-syntax 'string)
+
+;; provides a popup style imenu context menu (similar to IDEs)
+(use-package popup-imenu :ensure t
+  :config
+  (setq popup-imenu-position 'point)
+  (setq popup-menu-style 'indent)
+  :bind 
+  (("s-i" .  popup-imenu)
+   (:map popup-isearch-keymap 
+         ("s-i" . popup-isearch-cancel))))
+
+
+;; emacs autocompletion that doesn't suck
+  (use-package company
+    :diminish company-mode
+    :commands company-mode
+    :ensure t
+    :demand
+    :init
+    (setq
+     company-dabbrev-ignore-case nil
+     company-dabbrev-downcase nil
+     company-idle-delay 0
+     compay-minimum-prefix-length 3)
+    :config
+    ;; disables tab in compay mode freeing it for yasnippet
+    (define-key company-active-map [tab] nil)
+    (define-key company-active-map (kbd "TAB") nil))
+
+;; makes your modeline great again!
+(use-package smart-mode-line
+  :ensure t
+  :demand)
+  
+;; No Code below this line
+(message "Loaded Config Layer :: UI")
+(provide 'ui)

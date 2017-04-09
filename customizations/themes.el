@@ -22,7 +22,7 @@
 
 (global-set-key (kbd "C-c t") 'myemacs/random-theme)
 
-
-
+(message "Loaded Config Layer :: THEMES")
+(provide 'themes)
 
 
