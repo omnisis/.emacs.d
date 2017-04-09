@@ -33,11 +33,11 @@
 (bind-key "C-c C-e" 'ensime scala-mode-map)
 
 (bind-key "M-." 'ensime-edit-definition-with-fallback ensime-mode-map)
-(bind-key [f8] 'ensime-sbt-do-compile ensime-mode-map)
+(bind-key [f6] 'ensime-sbt-do-compile ensime-mode-map)
 
 ;; bind key in both scala/ensime to switch between code/REPL
-(bind-key [f9] 'ensime-sbt-switch ensime-mode-map)
-(bind-key [f10] 'ensime-sbt-do-run ensime-mode-map)
+(bind-key [f8] 'ensime-sbt-switch ensime-mode-map)
+(bind-key [f9] 'ensime-sbt-do-run ensime-mode-map)
 (bind-key (kbd "C-c C-t") 'ensime-sbt-do-test-dwim ensime-mode-map)
 (add-hook 'sbt-mode-hook 'myemacs/sbt-mode-hook)
 
