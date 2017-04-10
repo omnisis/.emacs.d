@@ -108,6 +108,15 @@
   :ensure t
   :demand)
   
+;; This is a lifesaver on my MBPro: an ergo keybinding for 
+;; keyboard scrolling that is very intuitive 
+(global-set-key (kbd "s-<up>") 'scroll-down)
+(global-set-key (kbd "s-<down>") 'scroll-up)
+(global-set-key (kbd "C-s-<down>") 'end-of-buffer)
+(global-set-key (kbd "C-s-<up>") 'beginning-of-buffer)
+
 ;; No Code below this line
 (message "Loaded Config Layer :: UI")
 (provide 'ui)
+
+

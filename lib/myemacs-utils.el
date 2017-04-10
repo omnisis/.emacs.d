@@ -1,14 +1,14 @@
-(defun flatten (mylist)
+(defun myemacs/flatten (mylist)
   "Flattens a list recusively for example: 
-  (flatten '(foo (bar (bat baz) cool) boo)) -> '(foo bar bat baz cool boo)"
+  '(foo (bar (bat baz) cool) boo)) -> '(foo bar bat baz cool boo)"
   (cond
    ((null mylist) nil)
    ((atom mylist) (list mylist))
    (t
-    (append (flatten (car mylist)) (flatten (cdr mylist))))))
+    (eappend (flatten (car mylist)) (flatten (cdr mylist))))))
 
 
-(defun rename-this-file-and-buffer (new-name)
+(defun myemacs/rename-this-file-and-buffer (new-name)
   "Renames both current buffer and file it's visiting to NEW-NAME."
   (interactive "New name: ")
   (let ((name (buffer-name))
@@ -21,7 +21,7 @@
       (set-visited-file-name new-name)
       (rename-buffer new-name))))
 
-(defun browse-current-file ()
+(defun myemacs/browse-current-file ()
   "Open the current file as a URL using `browse-url'."
   (interactive)
   (let ((file-name (buffer-file-name)))
@@ -31,7 +31,26 @@
       (browse-url (concat "file://" file-name)))))
 
 
+(defun myemacs/empty-file-if-not-exists (path)
+  (when (not (file-exists-p path))
+    (with-temp-buffer (write-file path))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Custom Groups / Vars
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; These settings allow for un-intrusive tweaks to the base configuration.
+
+(defgroup myemacs nil
+  "Settings for configuring how myemacs functions")
+
+
+(defcustom myemacs-keyhelp-backend 'which-key
+  "The keyhelp backend to use or nil to disable this feature (not recommended)."
+  :type '(choice (const :tag "off" nil)
+                 (const :tag "guide-key" 'guide-key)
+                 (const :tag "which-key" 'which-key))
+  :group 'myemacs)
 
 
 (provide 'myemacs-utils)

@@ -9,7 +9,10 @@
 	try-expand-dabbrev-all-buffers
 	try-expand-dabbrev-from-kill
 	try-complete-lisp-symbol-partially
-	try-complete-lisp-symbol))
+	try-complete-lisp-symbol
+        try-complete-file-name-partially
+        try-complete-file-name
+))
 
 ;; highlight matching parens
 (show-paren-mode 1)
@@ -89,6 +92,7 @@
   (delete-horizontal-space)
   (insert " "))
 
+;; Some keybindings
 (global-set-key (kbd "C-c j") 'join-lines)
 
 ;; edit html tags like sexps

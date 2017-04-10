@@ -53,6 +53,9 @@
 (setq ido-auto-merge-work-directories-length -1) 
 ;; include buffer names of recently open files even if not open now
 (setq ido-use-virtual-buffers t) 
+;; max number of directories to remember 
+(setq  ido-max-work-directory-list 25) 
+;;(setq ido-max-dir-file-cache )
 (ido-mode t)
 
 ;; shows a list of buffers
@@ -130,28 +133,12 @@
          ("s-F" . projectile-grep)))
 
 
-
-;; guide-key helps you to understand what keys are bound in a given context
-;; because many packages will use guide-key in a local mode hook
-;; to help learn their bindings we put this fairly early in the init
-;; sequence
-;; TODO: Allow switching between guide-key and ivy + which-key
-
-(defun myemacs/projectile-mode-hook-fn ()
-  (guide-key/add-local-guide-key-sequence "C-c p"))
-
-(use-package guide-key 
-  :ensure t
-  :demand
-  :config 
-  (require 'guide-key)
-  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
-  (setq guide-key/idle-delay 0.1)
-  (setq guide-key/popup-window-position 'bottom)
-  (setq guide-key/text-scale-amount 1.5)
-  (add-hook 'projectile-mode-hook #'myemacs/projectile-mode-hook-fn)
-  (guide-key-mode 1))
-
+;; configure a keyhelp backend, currently supported
+;; options are guide-key or which-key and can be
+;; set with a customize var
+(when (boundp 'myemacs-keyhelp-backend)
+  (cond ((equal 'guide-key myemacs-keyhelp-backend) (require 'guidekey-support))
+        ((equal 'which-key myemacs-keyhelp-backend) (require 'whichkey-support))))
 
 (message "Loaded Config Layer :: NAVIGATION")
 (provide 'navigation)

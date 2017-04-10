@@ -10,3 +10,6 @@ TAGS
 backups/
 *.eld
 games/
+custom.el
+/tramp
+*~

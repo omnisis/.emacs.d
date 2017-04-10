@@ -15,7 +15,16 @@
 ;; git integration
 (use-package magit
   :demand
-  :ensure t)
+  :ensure t
+  :bind 
+  ("C-x g"  . magit-status))
+
+(defalias 'qrr 'query-replace-regexp-eval)
+
+;; memory is cheap nowadays
+;; GC every 20MB that is allocated
+(setq gc-cons-threshold 20000000)
+
 
 (message "Loaded Config Layer :: MISC")
 (provide 'misc)

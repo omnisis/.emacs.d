@@ -15,7 +15,8 @@
 
 ;; I don't like cluttering my init file with customization settings
 ;; I also prefer to prompt the user if unsaved customizations are not resolved on quit
-(setq custom-file "~/.emacs-custom.el")
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(myemacs/empty-file-if-not-exists custom-file)
 (load custom-file)
 (add-hook 'kill-emacs-query-functions
           'custom-prompt-customize-unsaved-options)

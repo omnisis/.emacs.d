@@ -20,7 +20,13 @@
 (setq shell-file-name "/bin/bash")
 (defun myemacs/shell-mode-hook ()
   ;; native shell is ZSH, this is a workaround
-  (setenv "SHELL" "/bin/bash"))
+  (setenv "SHELL" "/bin/bash")
+  ;; don't allow me to edit the prompt string on accident
+  (setq comint-prompt-read-only t) 
+  (setq comint-scroll-to-bottom-on-input t)
+  (setq comint-scroll-to-bottom-on-output t)
+  (setq comint-move-point-for-output t)
+)
 
 (add-hook 'shell-mode-hook 'myemacs/shell-mode-hook)
 

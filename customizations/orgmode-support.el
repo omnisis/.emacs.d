@@ -1,3 +1,6 @@
+;; make sure org is latest available
+(use-package org 
+  :ensure t)
 
 ;; Backend for org-mode that exports to github-flavored Markdown
 (use-package ox-gfm
