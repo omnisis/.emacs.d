@@ -31,7 +31,7 @@
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 
 
-;; Don't use hard tabs
+;; Don't use hard tabs !!!
 (setq-default indent-tabs-mode nil)
 
 ;; when you visit a file, point goes to the last place where it

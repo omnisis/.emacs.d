@@ -22,13 +22,16 @@
   :ensure t 
   :pin melpa-stable
   :config
-  (guide-key/add-local-guide-key-sequence "C-c C-v")
-  (guide-key/add-local-guide-key-sequence "C-c C-c")
-  (guide-key/add-local-guide-key-sequence "C-c C-t")
-  (guide-key/add-local-guide-key-sequence "C-c C-r")
-  (guide-key/add-local-guide-key-sequence "C-c C-b")
-  (guide-key/add-local-guide-key-sequence "C-c C-d")
-  (guide-key/add-local-guide-key-sequence "C-c C-e")
+  ;; optionally enable some guide-key mappings if guide-key enabled
+  (if (equal 'guide-key myemacs-keyhelp-backend)
+      (progn
+        (guide-key/add-local-guide-key-sequence "C-c C-v")
+        (guide-key/add-local-guide-key-sequence "C-c C-c")
+        (guide-key/add-local-guide-key-sequence "C-c C-t")
+        (guide-key/add-local-guide-key-sequence "C-c C-r")
+        (guide-key/add-local-guide-key-sequence "C-c C-b")
+        (guide-key/add-local-guide-key-sequence "C-c C-d")
+        (guide-key/add-local-guide-key-sequence "C-c C-e")))
   :bind 
   (:map scala-mode-map
         ;; quickly launch ensime from a scala buffer

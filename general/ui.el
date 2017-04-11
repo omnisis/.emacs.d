@@ -6,8 +6,13 @@
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode 0))
 
-;; show line numbers
-(global-linum-mode)
+;; line numbers 
+;; these are rendered mostly useless thanks to powerline
+(setq global-linum-mode nil)
+(setq column-number-mode t)
+
+;; make text the default major mode
+(setq default-major-mode 'text-mode)
 
 ;; don't show native OS scrollbars for buffers bc they're redundant
 (when (fboundp 'scroll-bar-mode)
@@ -62,7 +67,7 @@
 (setq ring-bell-function 'ignore)
 
 ;; smart modeline
-(setq sml/theme 'dark)
+;;(setq sml/theme 'dark)
 (sml/setup)
 
 
@@ -103,10 +108,19 @@
     (define-key company-active-map [tab] nil)
     (define-key company-active-map (kbd "TAB") nil))
 
+;; powerline
+(use-package powerline
+  :ensure t)
+
 ;; makes your modeline great again!
 (use-package smart-mode-line
   :ensure t
-  :demand)
+  :demand
+  :init
+  (setq sml/theme 'dark))
+
+(use-package smart-mode-line-powerline-theme
+  :ensure t)
   
 ;; This is a lifesaver on my MBPro: an ergo keybinding for 
 ;; keyboard scrolling that is very intuitive 

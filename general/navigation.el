@@ -136,9 +136,37 @@
 ;; configure a keyhelp backend, currently supported
 ;; options are guide-key or which-key and can be
 ;; set with a customize var
+(defun myemacs/init-guidekey ()
+  (defun myemacs/projectile-mode-hook-fn ()
+    (guide-key/add-local-guide-key-sequence "C-c p"))
+
+  (require 'guide-key)
+  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
+  (setq guide-key/idle-delay 0.1)
+  (setq guide-key/popup-window-position 'bottom)
+  (setq guide-key/text-scale-amount 1.5)
+  (add-hook 'projectile-mode-hook #'myemacs/projectile-mode-hook-fn)
+  (guide-key-mode 1))
+
+(defun myemacs/init-whichkey ()
+  (which-key-mode)
+  (which-key-setup-minibuffer)
+  ;; how long to wait b4 displaying keyhelp
+  (setq which-key-idle-delay 0.50))
+
 (when (boundp 'myemacs-keyhelp-backend)
-  (cond ((equal 'guide-key myemacs-keyhelp-backend) (require 'guidekey-support))
-        ((equal 'which-key myemacs-keyhelp-backend) (require 'whichkey-support))))
+  (cond 
+   ((equal 'guide-key myemacs-keyhelp-backend) 
+         (use-package guide-key
+           :ensure t
+           :config
+           (myemacs/init-guidekey)))
+
+   ((equal 'which-key myemacs-keyhelp-backend) 
+    (use-package which-key 
+      :ensure t
+      :config 
+      (myemacs/init-whichkey)))))
 
 (message "Loaded Config Layer :: NAVIGATION")
 (provide 'navigation)
